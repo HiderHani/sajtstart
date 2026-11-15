@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title} | ${client_name}</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>${client_name}</h1>
+    <nav>
+%{ for file, name in pages ~}
+      <a href="${file}.html">${name}</a>
+%{ endfor ~}
+    </nav>
+  </header>
+
+  <main>
+    <!-- Bilden skapas senare (se bildlistan som skickas till ORION) -->
+    <img class="hero" src="img/${page_slug}-hero.jpg" alt="${title} - ${client_name}">
+    <h2>${title}</h2>
+%{ if is_home ~}
+    <p class="tagline">${tagline}</p>
+%{ endif ~}
+    <p>Innehåll för sidan ${title} kommer här.</p>
+%{ if is_order ~}
+
+    <form class="order-form" action="#" method="post">
+      <label>Namn <input type="text" name="namn" required></label>
+      <label>E-post <input type="email" name="epost" required></label>
+      <label>Vad vill du beställa? <textarea name="bestallning" required></textarea></label>
+      <button type="submit">Skicka beställning</button>
+    </form>
+%{ endif ~}
+  </main>
+
+  <footer>
+    <p>&copy; ${client_name}</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -45,7 +45,7 @@ sajtstart/
 ```
 
 ## Krav
-- Terraform (`brew install terraform`)
+- Terraform (`brew tap hashicorp/tap && brew install hashicorp/tap/terraform`)
 - Python 3 (bara standardbiblioteket, inga paket)
 
 ## Så kör man projektet
@@ -79,7 +79,6 @@ cd ..
 python3 python/check_site.py
 ```
 `terraform workspace list` visar alla kunder, `terraform workspace select default` går tillbaka till BilStereo Pro.
-```
 
 ## Så testar man
 | Test | Förväntat resultat |
@@ -116,7 +115,24 @@ python3 python/check_site.py
   inget att installera, färre saker som kan gå fel på redovisningen.
 
 ## Resultat
-_(Klistra in utdrag från din egen körning här.)_
+Körning på min MacBook (Terraform 1.17.2, Python 3):
+
+```
+$ terraform apply
+Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+
+$ python3 python/check_site.py
+[INFO] Terraform: BilStereo Pro, 5 sidor i .../sites/bilstereo-pro
+[INFO] Kontrollerade 5 HTML-sidor
+[INFO] 5 bilder behöver skapas
+[INFO] OK: sajten för BilStereo Pro är hel. Rapport: .../reports/bilstereo-pro.json
+[INFO] Skickat till ORION (inkorg): .../orion_inbox/bilstereo-pro.json
+```
+
+- Sajten för **BilStereo Pro** skapades med 5 sidor (Hem, Produkter, Om oss, Beställ, Kontakt),
+  röd färgprofil och ett beställningsformulär på Beställ-sidan.
+- En andra kund, **Frisör Nova**, skapades i en egen workspace utan att BilStereo Pro påverkades.
+- ORION visade en rapport om varje färdig sajt inom 15 sekunder.
 
 ## Begränsningar
 - Kontrollerar bara lokala länkar, inte externa.
@@ -127,9 +143,23 @@ _(Klistra in utdrag från din egen körning här.)_
 - Bilderna skapas inte automatiskt ännu – nästa steg är att ORION/AI använder bildlistan.
 
 ## Reflektion
-_(Skriv själv: vad lärde du dig, vad var svårt, vad skulle du göra annorlunda?)_
+Det viktigaste jag lärde mig var hur olika verktyg kan prata med varandra. Terraform skapar sajten
+och lämnar ut information med `terraform output -json`, och Python läser den informationen för att
+veta exakt vad som ska kontrolleras. När jag förstod det fick jag idén att min AI-assistent ORION
+också kunde kopplas in i samma kedja – så att ORION får veta när en sajt är klar och ger mig en rapport.
+
+Det svåraste var att koppla ORION till uppgiften. ORION är en webbsida som körs som bakgrundsbild
+och kan inte läsa filer direkt från datorn, så jag löste det med en liten Python-server som lämnar
+ut rapporterna. Jag fick också problem med att Terraform inte fanns i Homebrews vanliga lista och
+fick installera det från HashiCorps egen källa.
+
+Nästa steg skulle vara att ORION använder bildlistan och tar fram bilderna till sajterna automatiskt.
 
 ## AI och källor
-Jag har använt Claude (AI) som stöd för projektidé, kodstruktur och README.
-Jag har själv testat lösningen, anpassat kunduppgifterna och gått igenom koden så att
-jag kan förklara den. Kursmaterial: Ars1222022/Infrastruktur-konfigurering-och-deployment.
+Jag har använt Claude (AI) som stöd i projektet:
+- för att komma fram till projektidén,
+- för att lösa problem på vägen, t.ex. hur jag skulle koppla ORION till uppgiften,
+- för att lösa problem i koden och README:n.
+
+Jag har själv valt vad sajterna ska innehålla (t.ex. BilStereo Pro), kört och testat hela
+kedjan på min egen dator och gått igenom koden så att jag kan förklara hur den fungerar. Kursmaterial: Ars1222022/Infrastruktur-konfigurering-och-deployment.

@@ -1,0 +1,13 @@
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/terraform.tfstate.d/
+
+# Genererat
+sites/
+logs/*.log
+reports/*.json
+orion_inbox/
+__pycache__/
+.DS_Store

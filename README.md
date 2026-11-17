@@ -31,7 +31,6 @@ sajtstart/
 │   ├── variables.tf        # vad som kan ändras per kund (med validering)
 │   ├── outputs.tf          # info som Python läser
 │   ├── terraform.tfvars    # standardkunden (BilStereo Pro)
-│   ├── kunder/             # en .tfvars-fil per ny kund (t.ex. frisor-nova.tfvars)
 │   └── templates/
 │       ├── page.html.tftpl # mall för varje sida (meny skapas automatiskt)
 │       └── style.css.tftpl # mall för CSS med kundens färg
@@ -69,17 +68,6 @@ cat orion_inbox/bilstereo-pro.json   # det som skickades till ORION
 python3 python/orion_server.py
 ```
 
-### Ny kund utan att röra de andra
-Varje kund får en egen Terraform-workspace (eget state) och en egen variabelfil:
-```bash
-cd terraform
-terraform workspace new frisor-nova
-terraform apply -var-file=kunder/frisor-nova.tfvars
-cd ..
-python3 python/check_site.py
-```
-`terraform workspace list` visar alla kunder, `terraform workspace select default` går tillbaka till BilStereo Pro.
-
 ## Så testar man
 | Test | Förväntat resultat |
 |------|--------------------|
@@ -110,7 +98,6 @@ python3 python/check_site.py
 - **Inkorgsmapp + liten server till ORION:** ORION är en webbsida (live wallpaper i Plash) och kan
   inte läsa filer på disken. `orion_server.py` lämnar därför ut inkorgen som JSON på
   `localhost:8765` (bara den egna datorn kan ansluta). ORION frågar var 15:e sekund och ger en rapport.
-- **Workspaces per kund:** en ändring för en kund kan aldrig radera en annan kunds sajt.
 - **Bara standardbibliotek i Python** (`subprocess`, `json`, `html.parser`, `logging`):
   inget att installera, färre saker som kan gå fel på redovisningen.
 
@@ -131,8 +118,7 @@ $ python3 python/check_site.py
 
 - Sajten för **BilStereo Pro** skapades med 5 sidor (Hem, Produkter, Om oss, Beställ, Kontakt),
   röd färgprofil och ett beställningsformulär på Beställ-sidan.
-- En andra kund, **Frisör Nova**, skapades i en egen workspace utan att BilStereo Pro påverkades.
-- ORION visade en rapport om varje färdig sajt inom 15 sekunder.
+- ORION visade en rapport om den färdiga sajten inom 15 sekunder.
 
 ## Begränsningar
 - Kontrollerar bara lokala länkar, inte externa.

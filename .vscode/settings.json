@@ -1,0 +1,23 @@
+{
+  // Visa bara basfilerna i utforskaren. Det genererade döljs (finns kvar på disken).
+  // Vill du se dem igen: ändra true till false nedan.
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/__pycache__": true,
+    "sites": true,
+    "reports": true,
+    "logs": true,
+    "orion_inbox": true,
+    "terraform/.terraform": true,
+    "terraform/.terraform.lock.hcl": true,
+    "terraform/terraform.tfstate*": true,
+    "terraform/terraform.tfstate.d": true
+  },
+  "explorer.sortOrder": "foldersNestsFiles",
+  "explorer.compactFolders": false,
+  "files.associations": {
+    "page.html.tftpl": "html",
+    "style.css.tftpl": "css"
+  }
+}

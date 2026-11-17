@@ -1,14 +1,30 @@
 <!DOCTYPE html>
+<!--
+  page.html.tftpl – MALLEN FÖR VARJE SIDA
+  Det mesta är vanlig HTML. Terraform (templatefile i main.tf) fyller i "hålen":
+    dollar-klammer  {title}           = sätt in ett värde här
+    procent-klammer { for } / { if }  = loop och villkor
+    tilde (~)                         = ta bort den tomma raden efter
+  Samma mall används för alla sidor, därför ser alla sidor likadana ut.
+-->
 <html lang="sv">
 <head>
+  <!-- UTF-8 = rätt tecken för å, ä och ö. viewport = sidan funkar i mobilen. -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Första hålet: t.ex. "Produkter | BilStereo Pro". check_site.py kollar att title finns. -->
   <title>${title} | ${client_name}</title>
+  <!-- Kopplar in stilmallen (skapas av resursen css i main.tf). -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
+    <!-- Kundens namn som stor rubrik. -->
     <h1>${client_name}</h1>
+    <!-- MENYN: loopen går igenom alla sidor i pages och skriver en länk per sida.
+         file = filnamnet (vänster sida), name = texten i menyn (höger sida).
+         Därför har ALLA sidor exakt samma meny. Obs: Terraform sorterar en map
+         efter nyckel, så menyn hamnar i bokstavsordning. -->
     <nav>
 %{ for file, name in pages ~}
       <a href="${file}.html">${name}</a>
@@ -17,13 +33,19 @@
   </header>
 
   <main>
-    <!-- Bilden skapas senare (se bildlistan som skickas till ORION) -->
+    <!-- Bilden finns inte än. check_site.py räknar det INTE som fel utan lägger den i
+         bildlistan images_needed, så att ORION kan skapa bilden med AI senare. -->
     <img class="hero" src="img/${page_slug}-hero.jpg" alt="${title} - ${client_name}">
     <h2>${title}</h2>
+    <!-- Villkor: sloganen visas bara på startsidan (is_home är true bara för index). -->
 %{ if is_home ~}
     <p class="tagline">${tagline}</p>
 %{ endif ~}
+    <!-- Platshållartext. Det riktiga innehållet skrivs senare. -->
     <p>Innehåll för sidan ${title} kommer här.</p>
+    <!-- Villkor: bara beställsidan får formuläret (is_order är true bara för bestall).
+         required = rutan måste fyllas i. action="#" = formuläret skickas inte
+         någonstans än (det finns ingen backend). -->
 %{ if is_order ~}
 
     <form class="order-form" action="#" method="post">
@@ -35,10 +57,12 @@
 %{ endif ~}
   </main>
 
+  <!-- Sidfoten: &copy; blir tecknet ©. -->
   <footer>
     <p>&copy; ${client_name}</p>
   </footer>
 
+  <!-- Kopplar in JavaScript-filen (skapas av resursen js i main.tf). -->
   <script src="js/main.js"></script>
 </body>
 </html>

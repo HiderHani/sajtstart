@@ -1,7 +1,17 @@
+/*
+  style.css.tftpl – STILMALLEN
+  Vanlig CSS. Terraform fyller bara i EN sak: kundens färg på raden med --primary.
+  Byt primary_color i terraform.tfvars, så byter hela sajten färg.
+*/
+
+/* :root = hela sidan. --primary är en CSS-variabel som får kundens färg.
+   Den används sedan med var(--primary) längre ner. */
 :root {
   --primary: ${primary_color};
 }
 
+/* Grundstil: ingen marginal, datorns eget typsnitt, luftigt radavstånd,
+   nästan svart text. */
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
@@ -9,29 +19,36 @@ body {
   color: #222;
 }
 
+/* Sidhuvudet får kundens färg som bakgrund och vit text. */
 header {
   background: var(--primary);
   color: white;
   padding: 1rem 2rem;
 }
 
+/* Menylänkarna: vita, med mellanrum, utan understrykning. */
 nav a {
   color: white;
   margin-right: 1rem;
   text-decoration: none;
 }
 
+/* Innehållet: högst 800 px brett. margin auto = centrerat i mitten. */
 main {
   max-width: 800px;
   margin: 2rem auto;
   padding: 0 1rem;
 }
 
+/* Sloganen på startsidan: lite större och i kundens färg. */
 .tagline {
   font-size: 1.25rem;
   color: var(--primary);
 }
 
+/* Den stora bilden: fyller bredden, 250 px hög.
+   object-fit: cover = bilden beskärs i stället för att bli utdragen.
+   Grå bakgrund syns så länge bilden saknas. */
 .hero {
   width: 100%;
   height: 250px;
@@ -39,18 +56,21 @@ main {
   background: #eee;
 }
 
+/* Beställningsformuläret: ett grid med mellanrum mellan fälten. */
 .order-form {
   display: grid;
   gap: 1rem;
   max-width: 400px;
 }
 
+/* Fälten i formuläret fyller hela bredden. */
 .order-form input,
 .order-form textarea {
   width: 100%;
   padding: 0.5rem;
 }
 
+/* Knappen får kundens färg. cursor: pointer = handen när man hovrar. */
 .order-form button {
   background: var(--primary);
   color: white;
@@ -59,6 +79,7 @@ main {
   cursor: pointer;
 }
 
+/* Sidfoten: centrerad, grå text. */
 footer {
   text-align: center;
   padding: 1rem;
